@@ -1,0 +1,49 @@
+[package]
+name = "hackme"
+description = "Track the submissions of a Hacker News user and notify on comments"
+readme = "README.md"
+repository = "https://github.com/developer-friendly/hackme"
+documentation = "https://docs.rs/hackme"
+authors = ["Meysam <meysam@developer-friendly.com>"]
+keywords = [
+  "cli",
+  "productivity",
+  "http",
+  "terminal",
+  "utility",
+]
+categories = [
+  "command-line-utilities",
+  "web-programming",
+]
+include = [
+  "src",
+  ".gitignore",
+  "Cargo.lock",
+  "Cargo.toml",
+  "LICENSE",
+  "README.md",
+]
+
+license = "Apache-2.0"
+version = "0.1.0"
+edition = "2021"
+
+[features]
+
+[dependencies]
+clap = { version = "4.4.18", features = ["derive"] }
+firebase-rs = "2.0.9"
+serde = { version = "1.0", features = ["derive"] }
+reqwest = { version = "0.11", features = ["json"] }
+tokio = { version = "1", features = ["full"] }
+
+[dev-dependencies]
+
+[build-dependencies]
+
+[profile.release]
+lto = "fat"
+codegen-units = 1
+panic = "abort"
+strip = true
