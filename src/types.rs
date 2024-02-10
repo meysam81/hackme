@@ -7,9 +7,9 @@ type ItemId = u32;
 #[derive(Deserialize, Debug)]
 pub struct User {
     about: Option<String>,
-    pub submitted: Vec<ItemId>,
+    pub submitted: Option<Vec<ItemId>>,
     created: u32,
-    id: String,
+    pub id: String,
     karma: u32,
 }
 
