@@ -1,11 +1,13 @@
 mod cli;
 mod config;
+mod errors;
 mod types;
 
+use crate::errors::Error;
 use cli::{Cli, Parser};
 use types::{Item, User};
 
-async fn fetch_submissions(user: &User) -> Result<Vec<Item>, Box<dyn std::error::Error>> {
+async fn fetch_submissions(user: &User) -> Result<Vec<Item>, Error> {
     let mut items = Vec::new();
     for submission in user.submitted.as_ref().unwrap() {
         let url = &format!(
@@ -19,7 +21,7 @@ async fn fetch_submissions(user: &User) -> Result<Vec<Item>, Box<dyn std::error:
 }
 
 #[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
+async fn main() -> Result<(), Error> {
     let cfg = config::Settings::new()?;
     println!("{:?}", cfg);
 
