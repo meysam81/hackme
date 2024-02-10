@@ -3,7 +3,7 @@ use crate::types::DbData;
 use serde_json::to_string;
 
 use tokio::fs::File;
-use tokio::io::{ self, AsyncWriteExt };
+use tokio::io::{self, AsyncWriteExt};
 
 pub(crate) async fn write_db(db_data: &'_ DbData, db_url: &'_ str) -> Result<(), Error> {
     let mut file = File::create(db_url).await?;

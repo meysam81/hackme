@@ -7,7 +7,7 @@ mod types;
 
 use crate::errors::Error;
 use cli::{Cli, Parser};
-use persistence::{write_db, read_db};
+use persistence::{read_db, write_db};
 use types::{DbData, Item, User};
 
 #[tokio::main]

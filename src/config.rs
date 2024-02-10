@@ -1,4 +1,4 @@
-use config::{ Config, ConfigError, Environment, File };
+use config::{Config, ConfigError, Environment, File};
 use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
@@ -12,7 +12,9 @@ pub(crate) struct Settings {
 
 impl Settings {
     pub(crate) fn new() -> Result<Self, ConfigError> {
-        let cfg = Config::builder().add_source(Environment::default()).build()?;
+        let cfg = Config::builder()
+            .add_source(Environment::default())
+            .build()?;
 
         cfg.try_deserialize()
     }
