@@ -7,7 +7,7 @@ mod types;
 
 use crate::errors::Error;
 use cli::{Cli, Parser};
-use persistence::write_db;
+use persistence::{write_db, read_db};
 use types::{DbData, Item, User};
 
 #[tokio::main]
@@ -37,6 +37,9 @@ async fn main() -> Result<(), Error> {
     }
 
     write_db(&db_data, &cfg.db_url).await?;
+
+    let db = read_db(&cfg.db_url).await?;
+    println!("{:?}", db);
 
     Ok(())
 }

@@ -29,7 +29,7 @@ pub struct Item {
     #[serde(default)]
     deleted: bool,
     #[serde(alias = "type")]
-    type_: Option<ItemType>,
+    item_type: Option<ItemType>,
     by: Option<String>,
     time: Option<u32>,
     text: Option<String>,
