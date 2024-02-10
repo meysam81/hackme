@@ -32,7 +32,7 @@ pub struct Item {
     type_: Option<ItemType>,
     by: Option<String>,
     time: Option<u32>,
-    // text: Option<String>,
+    text: Option<String>,
     #[serde(default)]
     dead: bool,
     parent: Option<ItemId>,

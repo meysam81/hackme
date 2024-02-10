@@ -1,4 +1,5 @@
 mod cli;
+mod config;
 mod types;
 
 use cli::{Cli, Parser};
@@ -19,12 +20,12 @@ async fn fetch_submissions(user: &User) -> Result<Vec<Item>, Box<dyn std::error:
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let cfg = config::Settings::new()?;
+    println!("{:?}", cfg);
+
     let cli = Cli::parse();
 
-    let url = &format!(
-        "https://hacker-news.firebaseio.com/v0/user/{}.json",
-        cli.user_id
-    );
+    let url = &format!("{}/v0/user/{}.json", cfg.hacker_news_base_url, cli.user_id);
     let user = reqwest::get(url).await?.json::<User>().await?;
     println!("{:?}", user);
 
@@ -34,7 +35,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("{:?}", submission);
             }
         }
-        None => println!("{} has not submitted any items", user.id),
+        None => eprintln!("{} has not submitted any items", user.id),
     }
 
     Ok(())
