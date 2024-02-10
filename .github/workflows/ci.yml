@@ -75,7 +75,7 @@ jobs:
         name: Install musl
         run: |
           sudo apt update
-          sudo apt install -y musl-tools
+          sudo apt install -y musl-tools libssl-dev
           echo 'OPENSSL_STATIC=1' >> $GITHUB_ENV
       - name: Build
         run: |
