@@ -2,5 +2,4 @@
 Cargo.lock
 vendor
 secrets
-.cargo
 hackme.json

@@ -41,16 +41,9 @@ config = "0.14"
 thiserror = "1.0"
 serde_json = "1.0.113"
 
-[env]
-RUSTFLAGS = "-A unused"
-
 [dev-dependencies]
 
 [build-dependencies]
-
-[build]
-job = 1
-incremental = true
 
 [profile.release]
 lto = "fat"
