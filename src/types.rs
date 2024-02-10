@@ -14,12 +14,13 @@ pub struct User {
 }
 
 #[derive(Deserialize, Debug)]
+#[serde(rename_all = "lowercase")]
 enum ItemType {
-    job,
-    story,
-    comment,
-    poll,
-    pollopt,
+    Job,
+    Story,
+    Comment,
+    Poll,
+    PollOpt,
 }
 
 #[derive(Deserialize, Debug)]
