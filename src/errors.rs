@@ -1,14 +1,14 @@
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
     #[error("HTTP client error")]
-    SerializerError(#[from] reqwest::Error),
+    Serializer(#[from] reqwest::Error),
 
     #[error("Configuration error")]
-    ConfigError(#[from] config::ConfigError),
+    Config(#[from] config::ConfigError),
 
     #[error("IO error")]
-    IoError(#[from] std::io::Error),
+    Io(#[from] std::io::Error),
 
     #[error("Serialization error")]
-    SerializationError(#[from] serde_json::Error),
+    Serialization(#[from] serde_json::Error),
 }
