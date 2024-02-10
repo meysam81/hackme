@@ -75,7 +75,7 @@ jobs:
         name: Install musl
         run: |
           sudo apt update
-          sudo apt install -y musl-tools
+          sudo apt install -y musl-tools pkg-config libssl-dev
       - name: Build
         run: |
           cargo vendor
