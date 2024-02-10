@@ -2,11 +2,13 @@ mod cli;
 mod config;
 mod errors;
 mod httpclient;
+mod persistence;
 mod types;
 
 use crate::errors::Error;
 use cli::{Cli, Parser};
-use types::{Item, User};
+use persistence::write_db;
+use types::{DbData, Item, User};
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
@@ -15,19 +17,26 @@ async fn main() -> Result<(), Error> {
 
     let cli = Cli::parse();
 
+    let mut db_data: DbData = Default::default();
+
     let user = httpclient::fetch_user(&cfg.hacker_news_base_url, &cli.user_id).await?;
     println!("{:?}", user);
 
+    db_data.user = user.clone();
+
     match &user.submitted {
         Some(submitted) => {
-            for submission in
-                httpclient::fetch_submissions(&cfg.hacker_news_base_url, &user).await?
-            {
+            let user_submissions =
+                httpclient::fetch_submissions(&cfg.hacker_news_base_url, &user).await?;
+            for submission in &user_submissions {
                 println!("{:?}", submission);
             }
+            db_data.items = user_submissions;
         }
         None => eprintln!("{} has not submitted any items", user.id),
     }
+
+    write_db(&db_data, &cfg.db_url).await?;
 
     Ok(())
 }

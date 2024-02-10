@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 
 type ItemId = u32;
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct User {
     about: Option<String>,
     pub submitted: Option<Vec<ItemId>>,
@@ -13,7 +13,7 @@ pub struct User {
     karma: u32,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "lowercase")]
 enum ItemType {
     Job,
@@ -23,7 +23,7 @@ enum ItemType {
     PollOpt,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Default)]
 pub struct Item {
     id: ItemId,
     #[serde(default)]
@@ -43,4 +43,10 @@ pub struct Item {
     title: Option<String>,
     parts: Option<Vec<ItemId>>,
     descendants: Option<u32>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Default)]
+pub struct DbData {
+    pub user: User,
+    pub items: Vec<Item>,
 }

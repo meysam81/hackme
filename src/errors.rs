@@ -5,4 +5,10 @@ pub enum Error {
 
     #[error("Configuration error")]
     ConfigError(#[from] config::ConfigError),
+
+    #[error("IO error")]
+    IoError(#[from] std::io::Error),
+
+    #[error("Serialization error")]
+    SerializationError(#[from] serde_json::Error),
 }
