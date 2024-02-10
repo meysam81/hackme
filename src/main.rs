@@ -1,3 +1,4 @@
+mod change;
 mod cli;
 mod config;
 mod errors;
@@ -5,41 +6,40 @@ mod httpclient;
 mod persistence;
 mod types;
 
+use crate::cli::{Cli, Parser};
 use crate::errors::Error;
-use cli::{Cli, Parser};
-use persistence::{read_db, write_db};
-use types::{DbData, Item, User};
+use crate::persistence::{read_db, write_db};
+use crate::types::{DbData, Item, User};
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
     let cfg = config::Settings::new()?;
-    println!("{:?}", cfg);
 
     let cli = Cli::parse();
 
-    let mut db_data: DbData = Default::default();
+    let old_db = read_db(&cfg.db_url).await?;
+
+    let mut new_db: DbData = Default::default();
 
     let user = httpclient::fetch_user(&cfg.hacker_news_base_url, &cli.user_id).await?;
-    println!("{:?}", user);
 
-    db_data.user = user.clone();
-
-    match &user.submitted {
-        Some(submitted) => {
-            let user_submissions =
-                httpclient::fetch_submissions(&cfg.hacker_news_base_url, &user).await?;
-            for submission in &user_submissions {
-                println!("{:?}", submission);
-            }
-            db_data.items = user_submissions;
-        }
-        None => eprintln!("{} has not submitted any items", user.id),
+    new_db.user = user.clone();
+    if let Some(submitted) = user.submitted {
+        new_db.items =
+            httpclient::fetch_submissions(&cfg.hacker_news_base_url, &new_db.user).await?;
     }
 
-    write_db(&db_data, &cfg.db_url).await?;
+    let new_comment_ids = change::more_comments_added(&old_db, &new_db).await?;
+    let new_comments: Vec<Item> = new_db
+        .items
+        .iter()
+        .filter(|i| new_comment_ids.contains(&i.id))
+        .cloned()
+        .collect();
 
-    let db = read_db(&cfg.db_url).await?;
-    println!("{:?}", db);
+    println!("New comments: {:?}", new_comments);
+
+    write_db(&new_db, &cfg.db_url).await?;
 
     Ok(())
 }

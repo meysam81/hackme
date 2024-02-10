@@ -2,7 +2,7 @@ use std::path::PathBuf;
 
 use serde::{Deserialize, Serialize};
 
-type ItemId = u32;
+pub(crate) type ItemId = u32;
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct User {
@@ -13,7 +13,7 @@ pub struct User {
     karma: u32,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "lowercase")]
 enum ItemType {
     Job,
@@ -23,9 +23,9 @@ enum ItemType {
     PollOpt,
 }
 
-#[derive(Serialize, Deserialize, Debug, Default)]
-pub struct Item {
-    id: ItemId,
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub(crate) struct Item {
+    pub id: ItemId,
     #[serde(default)]
     deleted: bool,
     #[serde(alias = "type")]
@@ -42,7 +42,7 @@ pub struct Item {
     score: Option<i32>,
     title: Option<String>,
     parts: Option<Vec<ItemId>>,
-    descendants: Option<u32>,
+    pub descendants: Option<u32>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Default)]
