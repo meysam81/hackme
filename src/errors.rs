@@ -17,4 +17,7 @@ pub enum Error {
 
     #[error("Template not found")]
     TemplateNotFound,
+
+    #[error("Join error")]
+    JoinError(#[from] tokio::task::JoinError),
 }

@@ -15,6 +15,6 @@ pub(crate) enum Templates {
 
 pub(crate) async fn get_template(template_name: Templates) -> Result<&'static str, Error> {
     match template_name {
-        Templates::NewComments => Ok(self::new_comments::get_html().await),
+        Templates::NewComments => Ok(new_comments::get_html().await),
     }
 }

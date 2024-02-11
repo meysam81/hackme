@@ -6,6 +6,7 @@ repos:
         args: ["--maxkb=600"]
       - id: check-ast
       - id: check-executables-have-shebangs
+        exclude: src/main.rs
       - id: check-json
       - id: check-shebang-scripts-are-executable
         exclude: .*templates/.*j2$
