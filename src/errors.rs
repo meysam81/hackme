@@ -11,4 +11,10 @@ pub enum Error {
 
     #[error("Serialization error")]
     Serialization(#[from] serde_json::Error),
+
+    #[error("UTF-8 error")]
+    Utf8(#[from] std::str::Utf8Error),
+
+    #[error("Template not found")]
+    TemplateNotFound,
 }

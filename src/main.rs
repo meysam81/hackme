@@ -4,11 +4,13 @@ mod config;
 mod errors;
 mod httpclient;
 mod persistence;
+mod template;
 mod types;
 
 use crate::cli::{Cli, Parser};
 use crate::errors::Error;
 use crate::persistence::{read_db, write_db};
+use crate::template::{get_template, Templates};
 use crate::types::{DbData, Item, User};
 
 #[tokio::main]
