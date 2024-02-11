@@ -15,9 +15,6 @@ pub enum Error {
     #[error("UTF-8 error")]
     Utf8(#[from] std::str::Utf8Error),
 
-    #[error("Template not found")]
-    TemplateNotFound,
-
     #[error("Join error")]
     Join(#[from] tokio::task::JoinError),
 }
