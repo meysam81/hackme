@@ -32,3 +32,12 @@ repos:
     hooks:
       - id: fmt
       - id: cargo-check
+  - repo: local
+    hooks:
+      - id: clippy
+        language: rust
+        name: cargo-clippy
+        always_run: true
+        files: '\.rs$'
+        entry: cargo clippy --all-targets --all -- -D warnings
+        pass_filenames: false
