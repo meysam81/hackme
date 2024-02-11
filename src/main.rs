@@ -16,7 +16,7 @@ use crate::cli::{Cli, Parser};
 use crate::errors::Error;
 use crate::persistence::{read_db, write_db};
 use crate::template::{get_template, Templates};
-use crate::types::{DbData, Item, User};
+use crate::types::DbData;
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
@@ -35,7 +35,7 @@ async fn main() -> Result<(), Error> {
     }
     new_db.user = user;
 
-    // let new_comment_ids = change::more_comments_added(&old_db, &new_db).await?;
+    let _new_comment_ids = change::more_comments_added(&old_db, &new_db).await?;
     // let new_comments: Vec<Item> = new_db
     //     .items
     //     .iter()
@@ -47,7 +47,7 @@ async fn main() -> Result<(), Error> {
 
     write_db(&new_db, &cfg.db_url).await?;
 
-    // let tpl = get_template(Templates::NewComments).await?;
+    let _tpl = get_template(Templates::NewComments).await?;
     // println!("{}", tpl);
 
     Ok(())

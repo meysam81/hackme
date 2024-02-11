@@ -1,4 +1,4 @@
 [build]
 jobs = 8
 incremental = true
-rustflags = ["-A", "unused"]
+# rustflags = ["-A", "unused"]

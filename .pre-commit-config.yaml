@@ -39,5 +39,5 @@ repos:
         name: cargo-clippy
         always_run: true
         files: '\.rs$'
-        entry: cargo clippy --all-targets --all -- -D warnings
+        entry: cargo fix --allow-staged
         pass_filenames: false

@@ -1,12 +1,6 @@
 mod new_comments;
 
-use std::sync::Arc;
-use std::{collections::HashMap, sync::Mutex};
-use tinytemplate::TinyTemplate;
-use tokio::sync::OnceCell;
-
 use crate::errors::Error;
-use crate::types::Item;
 
 #[derive(Debug)]
 pub(crate) enum Templates {

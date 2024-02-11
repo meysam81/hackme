@@ -1,5 +1,6 @@
 use crate::errors::Error;
 use crate::types::{Item, ItemId, User};
+
 use std::future::Future;
 use tokio::task::JoinSet;
 
@@ -11,7 +12,6 @@ pub(crate) async fn fetch_user<'a>(base_url: &'a str, user_id: &'a str) -> Resul
 }
 
 pub(crate) async fn process_batch(
-    base_url: &str,
     batch: Vec<impl Future<Output = Result<Item, Error>> + 'static + std::marker::Send>,
 ) -> Result<Vec<Item>, Error> {
     let mut items = Vec::new();
@@ -34,6 +34,7 @@ pub(crate) async fn fetch_submissions<'a>(
 ) -> Result<Vec<Item>, Error> {
     let mut items = Vec::new();
 
+    let batch_size = 2_usize.pow(8);
     let mut batch = Vec::new();
 
     for submission in submissions {
@@ -44,13 +45,14 @@ pub(crate) async fn fetch_submissions<'a>(
         };
         batch.push(task);
 
-        if batch.len() == 50 {
-            items.extend(process_batch(base_url, batch).await?);
+        if batch.len() >= batch_size {
+            items.extend(process_batch(batch).await?);
             batch = Vec::new();
         }
     }
     if !batch.is_empty() {
-        items.extend(process_batch(base_url, batch).await?);
+        items.extend(process_batch(batch).await?);
     }
+
     Ok(items)
 }
