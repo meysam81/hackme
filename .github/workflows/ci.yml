@@ -78,8 +78,7 @@ jobs:
           sudo apt install -y musl-tools pkg-config libssl-dev
       - name: Build
         run: |
-          cargo vendor
-          cargo build --frozen --release --target ${{ matrix.target }}
+          cargo build --release --target ${{ matrix.target }}
       - name: Rename binary
         run: |
           cp target/${{ matrix.target }}/release/${{ env.BINARY_NAME }} target/${{ matrix.target }}/release/${{ env.BINARY_NAME }}-${{ matrix.target }}
