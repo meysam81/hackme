@@ -18,6 +18,7 @@ on:
 env:
   CARGO_TERM_COLOR: always
   BINARY_NAME: hackme
+  TOOLCHAIN: nightly
 
 jobs:
   test:
@@ -36,7 +37,8 @@ jobs:
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - name: Install Rust
         run: |
-          rustup toolchain install nightly
+          rustup toolchain install ${{ env.TOOLCHAIN }}
+          rustup default ${{ env.TOOLCHAIN }}
       - name: Run tests
         run: |
           cargo test --all-features --all-targets --all
@@ -70,7 +72,8 @@ jobs:
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - name: Install Rust
         run: |
-          rustup toolchain install nightly --target ${{ matrix.target }}
+          rustup toolchain install ${{ env.TOOLCHAIN }} --target ${{ matrix.target }}
+          rustup default ${{ env.TOOLCHAIN }}
       - if: contains(matrix.target, 'musl')
         name: Install musl
         run: |
@@ -148,10 +151,11 @@ jobs:
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - name: Install Rust
         run: |
-          rustup toolchain install nightly --component rustfmt
+          rustup toolchain install ${{ env.TOOLCHAIN }} --component rustfmt
+          rustup default ${{ env.TOOLCHAIN }}
       - name: Run fmt
         run: |
-          cargo +nightly fmt --all -- --check
+          cargo +${{ env.TOOLCHAIN }} fmt --all -- --check
 
   clippy:
     if: github.ref_name == 'main' || github.event_name == 'pull_request'
@@ -169,10 +173,11 @@ jobs:
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - name: Install Rust
         run: |
-          rustup toolchain install nightly --component clippy
+          rustup toolchain install ${{ env.TOOLCHAIN }} --component clippy
+          rustup default ${{ env.TOOLCHAIN }}
       - name: Run clippy
         run: |
-          cargo +nightly clippy --all --all-targets --all-features -- -D warnings
+          cargo +${{ env.TOOLCHAIN }} clippy --all --all-targets --all-features -- -D warnings
 
   trivy:
     permissions:
@@ -229,7 +234,8 @@ jobs:
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - name: Install Rust
         run: |
-          rustup toolchain install nightly
+          rustup toolchain install ${{ env.TOOLCHAIN }}
+          rustup default ${{ env.TOOLCHAIN }}
       - name: Publish
         env:
           CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
