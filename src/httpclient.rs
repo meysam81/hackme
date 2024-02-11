@@ -10,8 +10,8 @@ pub(crate) async fn fetch_user<'a>(base_url: &'a str, user_id: &'a str) -> Resul
     Ok(user)
 }
 
-pub(crate) async fn process_batch<'a>(
-    base_url: &'a str,
+pub(crate) async fn process_batch(
+    base_url: &str,
     batch: Vec<impl Future<Output = Result<Item, Error>> + 'static + std::marker::Send>,
 ) -> Result<Vec<Item>, Error> {
     let mut items = Vec::new();
@@ -37,7 +37,7 @@ pub(crate) async fn fetch_submissions<'a>(
     let mut batch = Vec::new();
 
     for submission in submissions {
-        let url = String::from(format!("{}/v0/item/{}.json", base_url, submission));
+        let url = format!("{}/v0/item/{}.json", base_url, submission);
         let task = async move {
             let item = reqwest::get(url).await?.json::<Item>().await?;
             Ok(item)
