@@ -1,6 +1,7 @@
 use crate::errors::Error;
 use crate::types::{Item, ItemId, User};
 
+use indicatif::ProgressBar;
 use std::future::Future;
 use tokio::task::JoinSet;
 
@@ -36,8 +37,10 @@ pub(crate) async fn fetch_submissions<'a>(
 
     let batch_size = 2_usize.pow(8);
     let mut batch = Vec::new();
+    let bar = ProgressBar::new(submissions.len().try_into().unwrap());
 
     for submission in submissions {
+        bar.inc(1);
         let url = format!("{}/v0/item/{}.json", base_url, submission);
         let task = async move {
             let item = reqwest::get(url).await?.json::<Item>().await?;
@@ -53,6 +56,7 @@ pub(crate) async fn fetch_submissions<'a>(
     if !batch.is_empty() {
         items.extend(process_batch(batch).await?);
     }
+    bar.finish();
 
     Ok(items)
 }
