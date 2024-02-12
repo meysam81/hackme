@@ -37,8 +37,10 @@ pub(crate) async fn fetch_submissions<'a>(
 
     let batch_size = 2_usize.pow(8);
     let mut batch = Vec::new();
-    let bar = ProgressBar::new(submissions.len().try_into().unwrap());
+    let sub_size: usize = submissions.len();
+    let bar = ProgressBar::new(sub_size.try_into().unwrap());
 
+    println!("Fetching user submissions...");
     for submission in submissions {
         bar.inc(1);
         let url = format!("{}/v0/item/{}.json", base_url, submission);
@@ -56,7 +58,8 @@ pub(crate) async fn fetch_submissions<'a>(
     if !batch.is_empty() {
         items.extend(process_batch(batch).await?);
     }
-    bar.finish();
+    bar.finish_and_clear();
+    println!("Successfully fetched {} submissions", sub_size);
 
     Ok(items)
 }
