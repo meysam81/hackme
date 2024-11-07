@@ -41,7 +41,7 @@ reqwest = { version = "0.12", features = ["json"] }
 tokio = { version = "1", features = ["macros", "rt-multi-thread", "fs", "sync"] }
 openssl = { version = "0.10", features = ["vendored"] }
 config = "0.14"
-thiserror = "1.0"
+thiserror = "2.0"
 serde_json = "1"
 tinytemplate = "1.1"
 num_cpus = "1.16"
